@@ -28,37 +28,83 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'CareHub',
-      theme: ThemeData(
-        primaryColor: Colors.lightGreen[400],
-        scaffoldBackgroundColor: Colors.white,
-        textTheme: GoogleFonts.poppinsTextTheme(
-          Theme.of(context).textTheme,
+    const primaryColor = Color(0xFF4CAF50); // A green shade
+    const secondaryColor = Color(0xFFFFC107); // An amber shade
+
+    final lightTheme = ThemeData(
+      useMaterial3: true,
+      primaryColor: primaryColor,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: primaryColor,
+        brightness: Brightness.light,
+        secondary: secondaryColor,
+      ),
+      scaffoldBackgroundColor: Colors.grey[50],
+      textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
+      appBarTheme: AppBarTheme(
+        backgroundColor: primaryColor,
+        elevation: 0,
+        titleTextStyle: GoogleFonts.poppins(
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
         ),
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.lightGreen[400],
-          elevation: 0,
-          titleTextStyle: GoogleFonts.poppins(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: primaryColor,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.lightGreen[400],
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            padding: const EdgeInsets.symmetric(vertical: 16),
-          ),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          textStyle: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ),
-      initialRoute: '/',
+    );
+
+    final darkTheme = ThemeData(
+      useMaterial3: true,
+      primaryColor: primaryColor,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: primaryColor,
+        brightness: Brightness.dark,
+        secondary: secondaryColor,
+      ),
+      scaffoldBackgroundColor: Colors.grey[900],
+      textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).primaryTextTheme.apply(bodyColor: Colors.white, displayColor: Colors.white)),
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.grey[850],
+        elevation: 0,
+        titleTextStyle: GoogleFonts.poppins(
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: primaryColor,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          textStyle: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600),
+        ),
+      ),
+    );
+
+    return GetMaterialApp(
+      title: 'CareHub',
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: ThemeMode.system, // Or ThemeMode.light, ThemeMode.dark
+      initialRoute: '/splash',
       getPages: [
-        GetPage(name: '/', page: () => const SplashScreen()),
+        GetPage(name: '/splash', page: () => const SplashScreen()),
         GetPage(name: '/login', page: () => const LoginScreen()),
         GetPage(name: '/registration', page: () => const RegistrationScreen()),
         GetPage(name: '/forgot_password', page: () => const ForgotPasswordScreen()),
@@ -67,7 +113,10 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/caregivers', page: () => const CaregiversPage()),
         GetPage(
           name: '/add_edit_caregiver',
-          page: () => AddEditCaregiverPage(caregiver: Get.arguments as Caregiver?),
+          page: () {
+            final Caregiver? caregiver = Get.arguments as Caregiver?;
+            return AddEditCaregiverPage(caregiver: caregiver);
+          },
         ),
         GetPage(
           name: '/caregiver_details',

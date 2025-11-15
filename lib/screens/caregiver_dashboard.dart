@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:carehub/services/booking_service.dart';
 import 'package:carehub/models/booking_model.dart';
+import 'package:carehub/services/auth_service.dart';
 
 class CaregiverDashboard extends StatelessWidget {
   const CaregiverDashboard({super.key});
@@ -9,8 +10,8 @@ class CaregiverDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final BookingService bookingService = BookingService();
-    // TODO: Replace with the actual caregiver ID from auth
-    const String caregiverId = 'your_caregiver_id';
+    final AuthService authService = AuthService();
+    final String caregiverId = authService.currentUserId;
 
     return Scaffold(
       appBar: AppBar(

@@ -4,6 +4,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:carehub/models/caregiver_model.dart';
 import 'package:carehub/models/booking_model.dart';
 import 'package:carehub/services/booking_service.dart';
+import 'package:carehub/services/auth_service.dart';
 
 class BookingPage extends StatefulWidget {
   final Caregiver caregiver;
@@ -16,6 +17,7 @@ class BookingPage extends StatefulWidget {
 
 class _BookingPageState extends State<BookingPage> {
   final BookingService _bookingService = BookingService();
+  final AuthService _authService = AuthService();
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   TimeOfDay? _selectedTime;
@@ -41,7 +43,7 @@ class _BookingPageState extends State<BookingPage> {
   void _bookAppointment() async {
     if (_selectedDay == null || _selectedTime == null) {
       Get.snackbar(
-        'Error', 
+        'Error',
         'Please select a date and time.',
         snackPosition: SnackPosition.BOTTOM,
       );
@@ -62,7 +64,7 @@ class _BookingPageState extends State<BookingPage> {
     final newBooking = Booking(
       id: '', // Firestore will generate this
       caregiverId: widget.caregiver.id,
-      parentId: '', // TODO: Get the current user's ID
+      parentId: _authService.currentUserId,
       startTime: startTime,
       endTime: endTime,
       status: 'pending',
