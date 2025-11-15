@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "8810329409",
+    "firebase_url": "https://carehub-a5e11-default-rtdb.firebaseio.com",
+    "project_id": "carehub-a5e11",
+    "storage_bucket": "carehub-a5e11.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8810329409:android:9b8d7de3dd90b67eac9dc0",
+        "android_client_info": {
+          "package_name": "com.breakingbarriers.careHub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLOSuPgVL-oxN4XPssLhh_ecPBq_Bl7mQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8810329409:android:69b428d2627b1e4fac9dc0",
+        "android_client_info": {
+          "package_name": "com.example.myapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLOSuPgVL-oxN4XPssLhh_ecPBq_Bl7mQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
