@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'firebase_options.dart';
-import 'screens/splash_screen.dart';
+import 'auth_wrapper.dart';
 import 'screens/login_screen.dart';
 import 'screens/registration_screen.dart';
 import 'screens/forgot_password_screen.dart';
@@ -102,9 +102,9 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system, // Or ThemeMode.light, ThemeMode.dark
-      initialRoute: '/splash',
+      initialRoute: '/',
       getPages: [
-        GetPage(name: '/splash', page: () => const SplashScreen()),
+        GetPage(name: '/', page: () => const AuthWrapper()),
         GetPage(name: '/login', page: () => const LoginScreen()),
         GetPage(name: '/registration', page: () => const RegistrationScreen()),
         GetPage(name: '/forgot_password', page: () => const ForgotPasswordScreen()),

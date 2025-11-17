@@ -1,9 +1,50 @@
+import 'package:carehub/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../widgets/logo.dart';
 
-class LoginScreen extends StatelessWidget {
+enum UserType { parent, caregiver }
+
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _authService = AuthService();
+  UserType _userType = UserType.parent;
+
+  Future<void> _login() async {
+    try {
+      final user = await _authService.signIn(
+        _emailController.text,
+        _passwordController.text,
+      );
+      if (user != null) {
+        if (_userType == UserType.parent) {
+          Get.offNamed('/parent_dashboard');
+        } else {
+          Get.offNamed('/caregiver_dashboard');
+        }
+      } else {
+        Get.snackbar(
+          'Login Failed',
+          'Invalid email or password.',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        e.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +80,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 48),
                 TextFormField(
+                  controller: _emailController,
                   decoration: const InputDecoration(
                     labelText: 'Email',
                     border: OutlineInputBorder(),
@@ -48,6 +90,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
+                  controller: _passwordController,
                   obscureText: true,
                   decoration: const InputDecoration(
                     labelText: 'Password',
@@ -56,18 +99,35 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: () {
-                    Get.offNamed('/parent_dashboard');
-                  },
-                  child: const Text('Login as Parent'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Radio<UserType>(
+                      value: UserType.parent,
+                      groupValue: _userType,
+                      onChanged: (UserType? value) {
+                        setState(() {
+                          _userType = value!;
+                        });
+                      },
+                    ),
+                    const Text('Parent'),
+                    Radio<UserType>(
+                      value: UserType.caregiver,
+                      groupValue: _userType,
+                      onChanged: (UserType? value) {
+                        setState(() {
+                          _userType = value!;
+                        });
+                      },
+                    ),
+                    const Text('Caregiver'),
+                  ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 24),
                 ElevatedButton(
-                  onPressed: () {
-                    Get.offNamed('/caregiver_dashboard');
-                  },
-                  child: const Text('Login as Caregiver'),
+                  onPressed: _login,
+                  child: const Text('Login'),
                 ),
                 const SizedBox(height: 16),
                 Row(

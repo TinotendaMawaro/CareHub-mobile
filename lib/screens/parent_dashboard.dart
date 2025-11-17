@@ -54,15 +54,6 @@ class _ParentDashboardState extends State<ParentDashboard> {
           ),
         ],
       ),
-      floatingActionButton: _currentIndex == 0
-          ? FloatingActionButton(
-              onPressed: () {
-                Get.toNamed('/add_edit_caregiver');
-              },
-              tooltip: 'Add New Caregiver',
-              child: const Icon(Icons.person_add_alt_1),
-            )
-          : null,
     );
   }
 

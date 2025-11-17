@@ -14,4 +14,11 @@ class BookingService {
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) => Booking.fromFirestore(doc)).toList());
   }
+
+  Stream<List<Booking>> getBookingsForParent(String parentId) {
+    return _bookingsCollection
+        .where('parentId', isEqualTo: parentId)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => Booking.fromFirestore(doc)).toList());
+  }
 }
