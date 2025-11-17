@@ -1,9 +1,35 @@
+import 'package:carehub/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../widgets/logo.dart';
 
-class ForgotPasswordScreen extends StatelessWidget {
+class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
+
+  @override
+  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  final _emailController = TextEditingController();
+  final _authService = AuthService();
+
+  Future<void> _resetPassword() async {
+    try {
+      await _authService.sendPasswordResetEmail(_emailController.text);
+      Get.snackbar(
+        'Success',
+        'Password reset email sent. Please check your inbox.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        e.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +69,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 32),
                 TextFormField(
+                  controller: _emailController,
                   decoration: const InputDecoration(
                     labelText: 'Email',
                     border: OutlineInputBorder(),
@@ -52,9 +79,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
-                  onPressed: () {
-                    // TODO: Implement password reset logic
-                  },
+                  onPressed: _resetPassword,
                   child: const Text('Send Reset Link'),
                 ),
                 const SizedBox(height: 16),
