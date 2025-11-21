@@ -1,68 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:carehub/services/auth_service.dart';
-import 'package:carehub/services/database_service.dart';
 import '../widgets/logo.dart';
+import 'dart:async';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final AuthService _authService = AuthService();
-  final DatabaseService _databaseService = DatabaseService();
-
   @override
   void initState() {
     super.initState();
-    _navigate();
+    _navigateToNextScreen();
   }
 
-  void _navigate() async {
-    await Future.delayed(const Duration(seconds: 3));
-    final user = _authService.currentUser;
-    if (user != null) {
-      final userDoc = await _databaseService.users.doc(user.uid).get();
-      if (userDoc.exists) {
-        final userRole = userDoc.get('role');
-        if (userRole == 'parent') {
-          Get.offNamed('/parent_dashboard');
-        } else if (userRole == 'caregiver') {
-          Get.offNamed('/caregiver_dashboard');
-        } else {
-          Get.offNamed('/login');
-        }
-      } else {
-        Get.offNamed('/login');
-      }
-    } else {
-      Get.offNamed('/login');
-    }
+  void _navigateToNextScreen() {
+    Timer(const Duration(seconds: 10), () {
+      Get.offNamed('/auth');
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.only(top: 300.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const HeartLogo(size: 120),
+            const Center(child: HeartHandshakeLogo(size: 60)),
             const SizedBox(height: 20),
-            Text(
-              'CareHub',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Colors.lightGreen[600],
+            Center(
+              child: Text(
+                'CareHub',
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
             ),
             const SizedBox(height: 20),
-            const CircularProgressIndicator(),
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
           ],
         ),
       ),
