@@ -1,6 +1,8 @@
 import 'package:carehub/services/auth_service.dart';
+import 'package:carehub/services/biometric_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import '../widgets/logo.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -13,6 +15,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _emailController = TextEditingController();
   final _authService = AuthService();
+  bool _biometricAvailable = false;
 
   Future<void> _resetPassword() async {
     try {
@@ -28,6 +31,30 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         e.toString(),
         snackPosition: SnackPosition.BOTTOM,
       );
+    }
+  }
+
+  Future<void> _biometricRetrieveEmail() async {
+    final biometricService = context.read<BiometricService>();
+    final hasCredentials = await biometricService.hasStoredCredentials();
+
+    if (!hasCredentials) {
+      Get.snackbar(
+        'Biometric Retrieval',
+        'No stored credentials found. Please enter your email manually.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    final authenticated = await biometricService.authenticate();
+    if (authenticated) {
+      final credentials = await biometricService.getCredentials();
+      if (credentials['email'] != null) {
+        setState(() {
+          _emailController.text = credentials['email']!;
+        });
+      }
     }
   }
 

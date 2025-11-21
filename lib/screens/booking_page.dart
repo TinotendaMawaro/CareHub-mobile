@@ -61,10 +61,19 @@ class _BookingPageState extends State<BookingPage> {
     // For simplicity, lets assume a booking is for 1 hour
     final endTime = startTime.add(const Duration(hours: 1));
 
+    final userId = _authService.currentUserId;
+    if (userId == null) {
+      Get.snackbar(
+        'Error',
+        'User not logged in',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
     final newBooking = Booking(
       id: '', // Firestore will generate this
       caregiverId: widget.caregiver.id,
-      parentId: _authService.currentUserId,
+      parentId: userId,
       startTime: startTime,
       endTime: endTime,
       status: 'pending',

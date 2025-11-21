@@ -6,7 +6,10 @@ class Booking {
   final String parentId;
   final DateTime startTime;
   final DateTime endTime;
-  final String status; // e.g., 'pending', 'confirmed', 'cancelled'
+  final String status; // e.g., 'pending', 'accepted', 'rejected', 'started', 'ended'
+  final DateTime? actualStartTime;
+  final DateTime? actualEndTime;
+  final String? notes;
 
   Booking({
     required this.id,
@@ -15,6 +18,9 @@ class Booking {
     required this.startTime,
     required this.endTime,
     required this.status,
+    this.actualStartTime,
+    this.actualEndTime,
+    this.notes,
   });
 
   factory Booking.fromFirestore(DocumentSnapshot doc) {
@@ -26,6 +32,9 @@ class Booking {
       startTime: (data['startTime'] as Timestamp).toDate(),
       endTime: (data['endTime'] as Timestamp).toDate(),
       status: data['status'] ?? 'pending',
+      actualStartTime: data['actualStartTime'] != null ? (data['actualStartTime'] as Timestamp).toDate() : null,
+      actualEndTime: data['actualEndTime'] != null ? (data['actualEndTime'] as Timestamp).toDate() : null,
+      notes: data['notes'],
     );
   }
 
@@ -36,6 +45,9 @@ class Booking {
       'startTime': startTime,
       'endTime': endTime,
       'status': status,
+      'actualStartTime': actualStartTime,
+      'actualEndTime': actualEndTime,
+      'notes': notes,
     };
   }
 }

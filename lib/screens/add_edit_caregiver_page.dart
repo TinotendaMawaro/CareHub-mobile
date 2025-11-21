@@ -71,6 +71,7 @@ class _AddEditCaregiverPageState extends State<AddEditCaregiverPage> {
           name: _nameController.text,
           email: _emailController.text,
           phone: _phoneController.text,
+          certifications: '',
           qualifications: _qualificationsController.text,
           experience: int.tryParse(_experienceController.text) ?? 0,
           profilePictureUrl: profilePictureUrl,

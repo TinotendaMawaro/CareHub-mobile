@@ -1,4 +1,4 @@
-# myapp
+# CareHub-mobile
 
 A new Flutter project.
 

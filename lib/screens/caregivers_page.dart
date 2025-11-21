@@ -26,7 +26,7 @@ class CaregiversPage extends StatelessWidget {
               onPressed: () async {
                 try {
                   await databaseService.deleteCaregiver(caregiver.id);
-                  if (caregiver.profilePictureUrl.isNotEmpty) {
+                  if (caregiver.profilePictureUrl?.isNotEmpty ?? false) {
                     await storageService.deleteProfilePicture(caregiver.id);
                   }
                   Get.back(); // Close the dialog
@@ -75,10 +75,10 @@ class CaregiversPage extends StatelessWidget {
               final caregiver = caregivers[index];
               return ListTile(
                 leading: CircleAvatar(
-                  backgroundImage: caregiver.profilePictureUrl.isNotEmpty
-                      ? NetworkImage(caregiver.profilePictureUrl)
+                  backgroundImage: caregiver.profilePictureUrl?.isNotEmpty ?? false
+                      ? NetworkImage(caregiver.profilePictureUrl!)
                       : null,
-                  child: caregiver.profilePictureUrl.isEmpty
+                  child: caregiver.profilePictureUrl?.isEmpty ?? true
                       ? const Icon(Icons.person)
                       : null,
                 ),

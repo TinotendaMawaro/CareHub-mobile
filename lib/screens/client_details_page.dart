@@ -1,4 +1,4 @@
-import 'package:CareHub/models/client_model.dart';
+import 'package:carehub/models/client_model.dart';
 import 'package:flutter/material.dart';
 
 class ClientDetailsPage extends StatelessWidget {

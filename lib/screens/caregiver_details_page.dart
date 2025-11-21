@@ -21,10 +21,10 @@ class CaregiverDetailsPage extends StatelessWidget {
             Center(
               child: CircleAvatar(
                 radius: 80,
-                backgroundImage: caregiver.profilePictureUrl.isNotEmpty
-                    ? NetworkImage(caregiver.profilePictureUrl)
+                backgroundImage: caregiver.profilePictureUrl?.isNotEmpty ?? false
+                    ? NetworkImage(caregiver.profilePictureUrl!)
                     : null,
-                child: caregiver.profilePictureUrl.isEmpty
+                child: caregiver.profilePictureUrl?.isEmpty ?? true
                     ? const Icon(Icons.person, size: 80)
                     : null,
               ),
