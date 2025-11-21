@@ -13,9 +13,13 @@ class DatabaseService {
       'name': caregiver.name,
       'email': caregiver.email,
       'phone': caregiver.phone,
+      'certifications': caregiver.certifications,
       'qualifications': caregiver.qualifications,
       'experience': caregiver.experience,
       'profilePictureUrl': caregiver.profilePictureUrl,
+      'fcmToken': caregiver.fcmToken,
+      'lastTokenUpdate': caregiver.lastTokenUpdate,
+      'availabilityStatus': caregiver.availabilityStatus,
     });
   }
 
@@ -27,9 +31,13 @@ class DatabaseService {
         name: data['name'] ?? '',
         email: data['email'] ?? '',
         phone: data['phone'] ?? '',
+        certifications: data['certifications'] ?? '',
         qualifications: data['qualifications'] ?? '',
         experience: (data['experience'] as num?)?.toInt() ?? 0,
         profilePictureUrl: data['profilePictureUrl'] ?? '',
+        fcmToken: data['fcmToken'],
+        lastTokenUpdate: data['lastTokenUpdate'] != null ? (data['lastTokenUpdate'] as Timestamp).toDate() : null,
+        availabilityStatus: data['availabilityStatus'] ?? 'Available',
       );
     }).toList());
   }
@@ -43,9 +51,13 @@ class DatabaseService {
         name: data['name'] ?? '',
         email: data['email'] ?? '',
         phone: data['phone'] ?? '',
+        certifications: data['certifications'] ?? '',
         qualifications: data['qualifications'] ?? '',
         experience: (data['experience'] as num?)?.toInt() ?? 0,
         profilePictureUrl: data['profilePictureUrl'] ?? '',
+        fcmToken: data['fcmToken'],
+        lastTokenUpdate: data['lastTokenUpdate'] != null ? (data['lastTokenUpdate'] as Timestamp).toDate() : null,
+        availabilityStatus: data['availabilityStatus'] ?? 'Available',
       );
     }
     return null;
@@ -56,9 +68,13 @@ class DatabaseService {
       'name': caregiver.name,
       'email': caregiver.email,
       'phone': caregiver.phone,
+      'certifications': caregiver.certifications,
       'qualifications': caregiver.qualifications,
       'experience': caregiver.experience,
       'profilePictureUrl': caregiver.profilePictureUrl,
+      'fcmToken': caregiver.fcmToken,
+      'lastTokenUpdate': caregiver.lastTokenUpdate,
+      'availabilityStatus': caregiver.availabilityStatus,
     });
   }
 

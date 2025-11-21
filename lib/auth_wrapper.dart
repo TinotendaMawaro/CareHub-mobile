@@ -1,12 +1,16 @@
 import 'package:carehub/screens/caregiver_dashboard.dart';
 import 'package:carehub/screens/login_screen.dart';
 import 'package:carehub/screens/parent_dashboard.dart';
+import 'package:carehub/services/notification_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AuthWrapper extends StatelessWidget {
-  const AuthWrapper({super.key});
+  AuthWrapper({super.key});
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -17,34 +21,45 @@ class AuthWrapper extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasData) {
-          return FutureBuilder<DocumentSnapshot>(
-            future: FirebaseFirestore.instance
-                .collection('users')
-                .doc(snapshot.data!.uid)
-                .get(),
+          // Update FCM token when user logs in
+          context.read<NotificationService>().updateFCMToken();
+
+          return FutureBuilder<Map<String, dynamic>?>(
+            future: _getUserData(snapshot.data!.uid),
             builder: (context, userSnapshot) {
               if (userSnapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               }
-              if (userSnapshot.hasData && userSnapshot.data!.exists) {
-                final userType = userSnapshot.data!['userType'];
-                if (userType == 'parent') {
-                  return const ParentDashboard();
+              if (userSnapshot.hasData && userSnapshot.data != null) {
+                final role = userSnapshot.data!['role'];
+                if (role == 'parent') {
+                  return ParentDashboard();
                 } else {
-                  return const CaregiverDashboard();
+                  return CaregiverDashboard();
                 }
               } else {
-                // This case handles users that are authenticated but don't have a document in firestore
-                // This can happen if the document creation fails after registration
-                // You might want to navigate them back to a registration completion screen or simply the login screen
-                return const LoginScreen();
+                return LoginScreen();
               }
             },
           );
         } else {
-          return const LoginScreen();
+          // Remove FCM token when user logs out
+          context.read<NotificationService>().removeFCMToken();
+          return LoginScreen();
         }
       },
     );
+  }
+
+  Future<Map<String, dynamic>?> _getUserData(String uid) async {
+    final caregiverDoc = await _firestore.collection('caregivers').doc(uid).get();
+    if (caregiverDoc.exists) {
+      return {'role': 'caregiver', ...caregiverDoc.data()!};
+    }
+    final parentDoc = await _firestore.collection('parents').doc(uid).get();
+    if (parentDoc.exists) {
+      return {'role': 'parent', ...parentDoc.data()!};
+    }
+    return null;
   }
 }

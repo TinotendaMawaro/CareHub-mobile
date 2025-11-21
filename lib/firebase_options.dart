@@ -25,20 +25,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyD8YUuyWE_WSksdpbbggMhIMWuU1KlEvNI',
-    appId: 'YOUR_WEB_APP_ID', // Replace with your web app ID
+    apiKey: 'AIzaSyBIsFCs3WrNC7AV3OKBZh8gsV8-pVV6y3g',
+    appId: '1:8810329409:web:b6a5e61e28d6107aac9dc0',
     messagingSenderId: '8810329409',
     projectId: 'carehub-a5e11',
     authDomain: 'carehub-a5e11.firebaseapp.com',
-    storageBucket: 'carehub-a5e11.appspot.com',
+    storageBucket: 'carehub-a5e11.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD8YUuyWE_WSksdpbbggMhIMWuU1KlEvNI',
-    appId: 'YOUR_ANDROID_APP_ID', // Replace with your android app ID
+    apiKey: 'AIzaSyDLOSuPgVL-oxN4XPssLhh_ecPBq_Bl7mQ',
+    appId: '1:8810329409:android:9b8d7de3dd90b67eac9dc0',
     messagingSenderId: '8810329409',
     projectId: 'carehub-a5e11',
-    storageBucket: 'carehub-a5e11.appspot.com',
+    storageBucket: 'carehub-a5e11.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(

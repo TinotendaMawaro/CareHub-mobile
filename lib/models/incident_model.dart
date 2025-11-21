@@ -2,36 +2,52 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Incident {
   final String id;
-  final String clientId;
   final String caregiverId;
-  final DateTime timestamp;
+  final String incidentType; // e.g., Medical, Behavioral, etc.
   final String description;
+  final DateTime dateTime;
+  final String involvedParties;
+  final String actionsTaken;
+  final String status; // e.g., Reported, Under Review, Resolved
+  final List<String>? photoUrls;
 
   Incident({
     required this.id,
-    required this.clientId,
     required this.caregiverId,
-    required this.timestamp,
+    required this.incidentType,
     required this.description,
+    required this.dateTime,
+    required this.involvedParties,
+    required this.actionsTaken,
+    required this.status,
+    this.photoUrls,
   });
 
   factory Incident.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data() as Map;
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Incident(
       id: doc.id,
-      clientId: data['clientId'] ?? '',
       caregiverId: data['caregiverId'] ?? '',
-      timestamp: (data['timestamp'] as Timestamp).toDate(),
+      incidentType: data['incidentType'] ?? '',
       description: data['description'] ?? '',
+      dateTime: (data['dateTime'] as Timestamp).toDate(),
+      involvedParties: data['involvedParties'] ?? '',
+      actionsTaken: data['actionsTaken'] ?? '',
+      status: data['status'] ?? 'Reported',
+      photoUrls: List<String>.from(data['photoUrls'] ?? []),
     );
   }
 
   Map<String, dynamic> toFirestore() {
     return {
-      'clientId': clientId,
       'caregiverId': caregiverId,
-      'timestamp': timestamp,
+      'incidentType': incidentType,
       'description': description,
+      'dateTime': dateTime,
+      'involvedParties': involvedParties,
+      'actionsTaken': actionsTaken,
+      'status': status,
+      'photoUrls': photoUrls,
     };
   }
 }

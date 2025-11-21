@@ -4,6 +4,8 @@ class Client {
   final String diagnosis;
   final String address;
   final String emergencyContact;
+  final String? photoUrl;
+  final String? medicalNotes;
 
   Client({
     required this.id,
@@ -11,6 +13,8 @@ class Client {
     required this.diagnosis,
     required this.address,
     required this.emergencyContact,
+    this.photoUrl,
+    this.medicalNotes,
   });
 
   factory Client.fromFirestore(Map<String, dynamic> data, String documentId) {
@@ -20,6 +24,8 @@ class Client {
       diagnosis: data['diagnosis'] ?? '',
       address: data['address'] ?? '',
       emergencyContact: data['emergencyContact'] ?? '',
+      photoUrl: data['photoUrl'],
+      medicalNotes: data['medicalNotes'],
     );
   }
 }

@@ -97,10 +97,10 @@ class _ParentDashboardState extends State<ParentDashboard> {
               child: ListTile(
                 leading: CircleAvatar(
                   radius: 30,
-                  backgroundImage: caregiver.profilePictureUrl.isNotEmpty
-                      ? NetworkImage(caregiver.profilePictureUrl)
+                  backgroundImage: caregiver.profilePictureUrl?.isNotEmpty ?? false
+                      ? NetworkImage(caregiver.profilePictureUrl!)
                       : null,
-                  child: caregiver.profilePictureUrl.isEmpty
+                  child: caregiver.profilePictureUrl?.isEmpty ?? true
                       ? const Icon(Icons.person, size: 30)
                       : null,
                 ),
@@ -120,8 +120,12 @@ class _ParentDashboardState extends State<ParentDashboard> {
   }
 
   Widget _buildBookingList() {
+    final userId = _authService.currentUserId;
+    if (userId == null) {
+      return const Center(child: Text('User not logged in'));
+    }
     return StreamBuilder<List<Booking>>(
-      stream: _bookingService.getBookingsForParent(_authService.currentUserId),
+      stream: _bookingService.getBookingsForParent(userId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
