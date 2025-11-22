@@ -2,6 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../models/shift_model.dart';
 import '../models/incident_model.dart';
 import '../models/client_model.dart';
@@ -14,10 +15,15 @@ class LocalDatabaseService {
 
   LocalDatabaseService._internal();
 
-  Future<Database> get database async {
+  Future<Database?> get database async {
     if (_database != null) return _database!;
-    _database = await _initDatabase();
-    return _database!;
+    try {
+      _database = await _initDatabase();
+      return _database!;
+    } catch (e) {
+      // If database initialization fails (e.g., on web), return null
+      return null;
+    }
   }
 
   Future<Database> _initDatabase() async {
@@ -91,6 +97,8 @@ class LocalDatabaseService {
   // Shift operations
   Future<void> saveShiftLocally(Shift shift) async {
     final db = await database;
+    if (db == null) return; // Skip if database not available (e.g., web)
+
     await db.insert(
       'shifts',
       {
@@ -111,6 +119,8 @@ class LocalDatabaseService {
 
   Future<List<Shift>> getLocalShifts(String caregiverId) async {
     final db = await database;
+    if (db == null) return []; // Return empty list if database not available
+
     final List<Map<String, dynamic>> maps = await db.query(
       'shifts',
       where: 'caregiverId = ?',
@@ -134,11 +144,13 @@ class LocalDatabaseService {
 
   Future<List<Shift>> getLocalShiftsForClient(String clientId) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
+    if (db == null) return []; // Return empty list if database not available
+
+    final List<Map<String, dynamic>> maps = await db?.query(
       'shifts',
       where: 'clientId = ?',
       whereArgs: [clientId],
-    );
+    ) ?? [];
 
     return List.generate(maps.length, (i) {
       return Shift(
@@ -158,6 +170,8 @@ class LocalDatabaseService {
   // Incident operations
   Future<void> saveIncidentLocally(Incident incident) async {
     final db = await database;
+    if (db == null) return; // Skip if database not available (e.g., web)
+
     await db.insert(
       'incidents',
       {
@@ -178,6 +192,8 @@ class LocalDatabaseService {
 
   Future<List<Incident>> getLocalIncidents(String caregiverId) async {
     final db = await database;
+    if (db == null) return []; // Return empty list if database not available
+
     final List<Map<String, dynamic>> maps = await db.query(
       'incidents',
       where: 'caregiverId = ?',
@@ -202,6 +218,8 @@ class LocalDatabaseService {
   // Client operations
   Future<void> saveClientLocally(Client client) async {
     final db = await database;
+    if (db == null) return; // Skip if database not available (e.g., web)
+
     await db.insert(
       'clients',
       {
@@ -220,7 +238,9 @@ class LocalDatabaseService {
 
   Future<List<Client>> getLocalClients() async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('clients');
+    if (db == null) return []; // Return empty list if database not available
+
+    final List<Map<String, dynamic>> maps = await db?.query('clients') ?? [];
 
     return List.generate(maps.length, (i) {
       return Client(
@@ -238,6 +258,8 @@ class LocalDatabaseService {
   // Pending sync operations
   Future<void> addPendingSync(String type, Map<String, dynamic> data) async {
     final db = await database;
+    if (db == null) return; // Skip if database not available
+
     await db.insert('pending_sync', {
       'type': type,
       'data': data.toString(),
@@ -247,18 +269,24 @@ class LocalDatabaseService {
 
   Future<List<Map<String, dynamic>>> getPendingSync() async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('pending_sync');
+    if (db == null) return []; // Return empty list if database not available
+
+    final List<Map<String, dynamic>> maps = await db?.query('pending_sync') ?? [];
     return maps;
   }
 
   Future<void> removePendingSync(int id) async {
     final db = await database;
-    await db.delete('pending_sync', where: 'id = ?', whereArgs: [id]);
+    if (db == null) return; // Skip if database not available
+
+    await db?.delete('pending_sync', where: 'id = ?', whereArgs: [id]);
   }
 
   Future<void> updateLocalShift(String shiftId, Map<String, dynamic> updates) async {
     final db = await database;
-    await db.update(
+    if (db == null) return; // Skip if database not available
+
+    await db?.update(
       'shifts',
       updates,
       where: 'id = ?',
@@ -268,6 +296,8 @@ class LocalDatabaseService {
 
   Future<void> clearAllData() async {
     final db = await database;
+    if (db == null) return; // Skip if database not available
+
     await db.delete('shifts');
     await db.delete('incidents');
     await db.delete('clients');
