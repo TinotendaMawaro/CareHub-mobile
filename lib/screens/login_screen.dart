@@ -13,7 +13,10 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin {
+  late AnimationController _gradientController;
+  late Animation<Alignment> _gradientAnimation;
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _authService = AuthService();
@@ -116,6 +119,22 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _checkBiometricAvailability();
+
+    _gradientController = AnimationController(
+      duration: const Duration(seconds: 10),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    _gradientAnimation = Tween<Alignment>(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ).animate(_gradientController);
+  }
+
+  @override
+  void dispose() {
+    _gradientController.dispose();
+    super.dispose();
   }
 
   Future<void> _checkBiometricAvailability() async {

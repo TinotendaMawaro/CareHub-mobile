@@ -10,7 +10,7 @@ class ClientService {
 
   Stream<List<Client>> getClientsForCaregiver(String caregiverId) {
     return _clientsCollection
-        .where('assignedCaregivers', arrayContains: caregiverId)
+        .where('assignedCaregiverId', isEqualTo: caregiverId)
         .snapshots()
         .asyncMap((snapshot) async {
           final onlineClients = snapshot.docs.map((doc) => Client.fromFirestore(doc.data() as Map<String, dynamic>, doc.id)).toList();
@@ -47,5 +47,11 @@ class ClientService {
       }
       return null;
     }
+  }
+
+  Stream<List<Client>> getAllClients() {
+    return _clientsCollection
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => Client.fromFirestore(doc.data() as Map<String, dynamic>, doc.id)).toList());
   }
 }

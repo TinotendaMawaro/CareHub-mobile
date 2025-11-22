@@ -463,9 +463,11 @@ class __HomeScreenState extends State<_HomeScreen> with TickerProviderStateMixin
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Your Shifts for the Week:',
-                      style: Theme.of(context).textTheme.titleLarge,
+                    Flexible(
+                      child: Text(
+                        'Your Shifts for the Week:',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
                     ),
                     IconButton(
                       icon: const Icon(Icons.refresh),

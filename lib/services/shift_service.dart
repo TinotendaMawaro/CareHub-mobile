@@ -155,4 +155,10 @@ class ShiftService {
   Future<List<Map<String, dynamic>>> getPendingOfflineUpdates() async {
     return await _offlineService.getPendingUpdates();
   }
+
+  Stream<List<Shift>> getAllShifts() {
+    return _shiftsCollection
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => Shift.fromFirestore(doc)).toList());
+  }
 }
